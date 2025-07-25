@@ -16,11 +16,21 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            List (friends) { friend in
-                HStack {
-                    Text(friend.name)
-                    Text(friend.birthday, format: .dateTime.month(.wide).day().year())
+            List {
+                ForEach(friends) { friend in
+                    HStack {
+                        Text(friend.name)
+                        Text(friend.birthday, format: .dateTime.month(.wide).day().year())
+                        
+//                        Spacer()
+//                        //added
+//                        Button("-") {
+//                            friends.remove(at: 1)
+//                        }
+//                        .bold()
+                    }
                 }
+                .onDelete(perform: deleteFriend)
             }
             .navigationTitle("Birthdays")
             .safeAreaInset(edge: .bottom) { //pin the new friend-entry UI below list of friends
@@ -45,6 +55,12 @@ struct ContentView: View {
             
         }
 //        .padding()
+    }
+    func deleteFriend(at offsets: IndexSet) {
+        for index in offsets {
+            let friendToDelete = friends[index]
+            context.delete(friendToDelete)
+        }
     }
 }
 
